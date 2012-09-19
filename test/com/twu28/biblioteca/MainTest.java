@@ -12,15 +12,18 @@ public class MainTest {
 
     private PrintStream mockOutput;
     private Main main;
+    private Input mockInput;
 
     @Before
     public void setUp() throws Exception {
+        mockInput = mock(Input.class);
         mockOutput = mock(PrintStream.class);
         ArrayList<Book> booksAvailable = new ArrayList<Book>();
         booksAvailable.add(new Book(1, "Alice in Wonderland"));
         booksAvailable.add(new Book(2, "Da Vinci Code"));
         booksAvailable.add(new Book(3, "Angels and Demons"));
-        main = new Main(mockOutput, booksAvailable);
+
+        main = new Main(mockOutput, mockInput, booksAvailable);
     }
 
     @Test
@@ -66,9 +69,10 @@ public class MainTest {
         verify(mockOutput).println("Contact librarian");
     }
 
-    @Test
+    @Test(timeout = 100)
     public void shouldExitApplicationWhenMenuOptionIsZero() {
+        when(mockInput.nextInt()).thenReturn(0);
 
-//        main.run();
+        main.run();
     }
 }

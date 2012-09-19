@@ -3,23 +3,31 @@ package com.twu28.biblioteca;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
     List<Book> books = new ArrayList<Book>();
 
     private final PrintStream output;
+    private final Input input;
 
-    public Main(PrintStream output, List<Book> booksAvailable) {
+    public Main(PrintStream output, Input input, List<Book> booksAvailable) {
         this.output = output;
         this.books = booksAvailable;
+        this.input = input;
     }
 
     public void run() {
-        Scanner reader = new Scanner(System.in);
-        int userChoice = reader.nextInt();
+        displayWelcomeMessage();
+        printMenuOptions();
+
+        int userChoice = input.nextInt();
         while (userChoice != 0) {
-            displayWelcomeMessage();
+            if (userChoice == 1)
+                printBooks();
+            else if (userChoice == 2)
+                displayLibrarianMessage();
+            printMenuOptions();
+            userChoice = input.nextInt();
         }
     }
 
@@ -28,7 +36,10 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        new Main(System.out, null).run();
+        List<Book> availableBooks = new ArrayList<Book>();
+        availableBooks.add(new Book(1, "Deathly Hallows"));
+        availableBooks.add(new Book(2, "Chamber of Secret"));
+        new Main(System.out, new Input(), availableBooks).run();
     }
 
     public void printMenuOptions() {
