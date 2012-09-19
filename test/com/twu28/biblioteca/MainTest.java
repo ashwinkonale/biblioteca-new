@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -24,12 +25,12 @@ public class MainTest {
         booksAvailable.add(new Book(3, "Angels and Demons"));
         booksAvailable.add(new Book(5, "Chambers of Secret"));
 
-//        List<Movie> moviesAvailable =new ArrayList<Movie>();
-//        moviesAvailable.add(new Movie("The Godfather","Fransis","9.1"));
-//        moviesAvailable.add(new Movie("Snatch","Guy Ritchie","8.4"));
-//
+        List<Movie> moviesAvailable =new ArrayList<Movie>();
+        moviesAvailable.add(new Movie("The Godfather","Fransis","9.1"));
+        moviesAvailable.add(new Movie("Snatch","Guy Ritchie","8.4"));
 
-        main = new Main(mockOutput, mockInput, booksAvailable);
+
+        main = new Main(mockOutput, mockInput, booksAvailable ,moviesAvailable);
     }
 
     @Test
@@ -100,4 +101,24 @@ public class MainTest {
         main.reserveBook(4);
         verify(mockOutput).println("Sorry! requested book is not available");
     }
+    @Test
+    public void shouldBeAbleToViewMovieListInMenuOption(){
+        main.printMenuOptions();
+        verify(mockOutput).println("3. View all movies");
+    }
+    @Test
+    public void shouldBeAbleToViewAllBooks(){
+        main.printMovies();
+        verify(mockOutput).println("Snatch              Guy Ritchie                8.4");
+        verify(mockOutput).println("The Godfather       Fransis                    9.1");
+//        verify(mockOutput).println("The Godfather Fransis 9.1");
+    }
+    @Test(timeout = 100)
+    public void shouldDisplayMoviesWhenUserChoiceIs3(){
+        when(mockInput.nextInt()).thenReturn(3,0);
+        main.run();
+        verify(mockOutput).println("Snatch              Guy Ritchie                8.4");
+    }
+
+
 }
