@@ -2,11 +2,11 @@ package com.twu28.biblioteca;
 
 public class Book {
     private String bookName;
-    private int index;
+    private int isbn;
     private boolean isReserved;
 
-    public Book(int index, String bookName) {
-        this.index = index;
+    public Book(int isbn, String bookName) {
+        this.isbn = isbn;
         this.bookName = bookName;
     }
 
@@ -19,6 +19,10 @@ public class Book {
     }
 
     public String toString() {
-        return index + ":" + bookName;
+        return isbn + ":" + bookName;
+    }
+
+    boolean isSameIsbn(int isbn) {
+        return this.isbn == isbn;
     }
 }

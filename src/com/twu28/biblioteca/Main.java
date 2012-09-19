@@ -22,9 +22,12 @@ public class Main {
 
         int userChoice = input.nextInt();
         while (userChoice != 0) {
-            if (userChoice == 1)
+            if (userChoice == 1) {
                 printBooks();
-            else if (userChoice == 2)
+                output.println("Select the isbn of the book to be reserved");
+                int bookToReserve = input.nextInt();
+                reserveBook(bookToReserve);
+            } else if (userChoice == 2)
                 displayLibrarianMessage();
             printMenuOptions();
             userChoice = input.nextInt();
@@ -54,24 +57,30 @@ public class Main {
         }
     }
 
-    public void reserveBook(String indexNumber) {
-        int index = Integer.parseInt(indexNumber);
-        Book requestedBook = books.get(--index);
+    public void reserveBook(int isbn) {
+
+        Book requestedBook = null;
+        for (Book book : books) {
+            if (book.isSameIsbn(isbn)) {
+                requestedBook = book;
+            }
+        }
+
+        if(requestedBook == null) {
+            output.println("Sorry! requested book is not available");
+            return;
+        }
+
         if (requestedBook.isReserved()) {
             output.println("Book - " + requestedBook.toString() + " is not available.");
         } else {
             requestedBook.reserve();
             output.println("Book - " + requestedBook.toString() + " is reserved. Enjoy the book");
         }
-
     }
 
     public void displayLibrarianMessage() {
         output.println("Contact librarian");
     }
 
-    public void exit() {
-        System.exit(0);
-
-    }
 }

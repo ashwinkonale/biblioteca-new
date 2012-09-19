@@ -19,9 +19,15 @@ public class MainTest {
         mockInput = mock(Input.class);
         mockOutput = mock(PrintStream.class);
         ArrayList<Book> booksAvailable = new ArrayList<Book>();
-        booksAvailable.add(new Book(1, "Alice in Wonderland"));
         booksAvailable.add(new Book(2, "Da Vinci Code"));
+        booksAvailable.add(new Book(1, "Alice in Wonderland"));
         booksAvailable.add(new Book(3, "Angels and Demons"));
+        booksAvailable.add(new Book(5, "Chambers of Secret"));
+
+//        List<Movie> moviesAvailable =new ArrayList<Movie>();
+//        moviesAvailable.add(new Movie("The Godfather","Fransis","9.1"));
+//        moviesAvailable.add(new Movie("Snatch","Guy Ritchie","8.4"));
+//
 
         main = new Main(mockOutput, mockInput, booksAvailable);
     }
@@ -52,14 +58,16 @@ public class MainTest {
 
     @Test
     public void shouldBeAbleToReserveUnreservedBook() throws Exception {
-        main.reserveBook("1");
+        main.reserveBook(1);
         verify(mockOutput).println("Book - 1:Alice in Wonderland is reserved. Enjoy the book");
+        main.reserveBook(5);
+        verify(mockOutput).println("Book - 5:Chambers of Secret is reserved. Enjoy the book");
     }
 
     @Test
     public void shouldSayBookIsNotAvailableIfBookIsAlreadyReserved() throws Exception {
-        main.reserveBook("1");
-        main.reserveBook("1");
+        main.reserveBook(1);
+        main.reserveBook(1);
         verify(mockOutput).println("Book - 1:Alice in Wonderland is not available.");
     }
 
@@ -74,5 +82,22 @@ public class MainTest {
         when(mockInput.nextInt()).thenReturn(0);
 
         main.run();
+    }
+
+    @Test(timeout = 100)
+    public void shouldReserveBookAndNotBeAbleToReserveAgain() throws Exception {
+        when(mockInput.nextInt()).thenReturn(1, 5, 2, 0);
+
+        main.run();
+
+        verify(mockOutput).println("5:Chambers of Secret");
+        verify(mockOutput).println("Book - 5:Chambers of Secret is reserved. Enjoy the book");
+        verify(mockOutput).println("Contact librarian");
+    }
+
+    @Test
+    public void shouldDisplayBookIsNotAvailableWhenBookOfIsbnNotFound() throws Exception {
+        main.reserveBook(4);
+        verify(mockOutput).println("Sorry! requested book is not available");
     }
 }
