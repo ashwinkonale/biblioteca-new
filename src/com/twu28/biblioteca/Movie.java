@@ -11,9 +11,6 @@ public class Movie {
         this.rating=rating;
     }
     public String display(){
-//        String pattern="%-20s%-15.12s%10s\n";
-//        System.out.printf(pattern,movieName,directorName,rating);
-////        return movieName+" "+directorName+" "+rating;
         String name=String.format("%-20s",movieName);
         String director=String.format("%-20s",directorName);
         String rating1=String.format("%10s",rating);
