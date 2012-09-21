@@ -31,13 +31,8 @@ public class Main {
         while (userChoice != 0) {
             if (userChoice == 1) {
                 printBooks();
-                output.println("Select the isbn of the book to be reserved");
-                int bookToReserve = input.nextInt();
                 if(userId!=null){
-                    reserveBook(bookToReserve);
-                    }
-                else {
-                    output.println("Sorry! you need to login to use this service!");
+                    reserveBook();
                 }
             } else if (userChoice == 2)
                 displayLibrarianMessage();
@@ -85,7 +80,9 @@ public class Main {
         }
     }
 
-    public void reserveBook(int isbn) {
+    public void reserveBook() {
+        output.println("Select the isbn of the book to be reserved");
+        int isbn = input.nextInt();
 
         Book requestedBook = null;
         for (Book book : books) {

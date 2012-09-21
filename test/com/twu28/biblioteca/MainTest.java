@@ -65,17 +65,19 @@ public class MainTest {
 
     @Test
     public void shouldBeAbleToReserveUnreservedBook() throws Exception {
-        main.reserveBook(1);
-
+        when(mockInput.nextInt()).thenReturn(1,5);
+        main.reserveBook();
+        verify(mockOutput).println("Select the isbn of the book to be reserved");
         verify(mockOutput).println("Book - 1:Alice in Wonderland is reserved. Enjoy the book");
-        main.reserveBook(5);
+        main.reserveBook();
         verify(mockOutput).println("Book - 5:Chambers of Secret is reserved. Enjoy the book");
     }
 
     @Test
     public void shouldSayBookIsNotAvailableIfBookIsAlreadyReserved() throws Exception {
-        main.reserveBook(1);
-        main.reserveBook(1);
+        when(mockInput.nextInt()).thenReturn(1,1);
+        main.reserveBook();
+        main.reserveBook();
         verify(mockOutput).println("Book - 1:Alice in Wonderland is not available.");
     }
     @Test(timeout = 100)
@@ -98,7 +100,7 @@ public class MainTest {
 
     @Test
     public void shouldDisplayBookIsNotAvailableWhenBookOfIsbnNotFound() throws Exception {
-        main.reserveBook(4);
+        main.reserveBook();
         verify(mockOutput).println("Sorry! requested book is not available");
     }
     @Test
@@ -115,7 +117,7 @@ public class MainTest {
     }
     @Test(timeout = 100)
     public void shouldDisplayMoviesWhenUserChoiceIs3(){
-        when(mockInput.nextInt()).thenReturn(2,3, 0);
+        when(mockInput.nextInt()).thenReturn(2, 3, 0);
         main.run();
         verify(mockOutput).println("Snatch              Guy Ritchie                8.4");
     }
@@ -163,13 +165,6 @@ public class MainTest {
         when(mockInput.nextInt()).thenReturn(2,2,0);
         main.run();
         verify(mockOutput).println("Contact librarian");
-    }
-    @Test(timeout = 100)
-    public void guestShouldNotBeAbleToReserveBook(){
-        when(mockInput.nextInt()).thenReturn(2,1,3,0);
-        main.run();
-        verify(mockOutput).println("Select the isbn of the book to be reserved");
-        verify(mockOutput).println("Sorry! you need to login to use this service!");
     }
 
 
