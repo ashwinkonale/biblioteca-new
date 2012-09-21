@@ -10,16 +10,20 @@ public class Main {
 
     private final PrintStream output;
     private final Input input;
+    private List<User> users=new ArrayList<User>();
+    private User userId;
 
 
-    public Main(PrintStream output, Input input, List<Book> booksAvailable, List<Movie> moviesAvailable) {
+    public Main(PrintStream output, Input input, List<Book> booksAvailable, List<Movie> moviesAvailable, List<User> userList) {
         this.output = output;
         this.books = booksAvailable;
         this.input = input;
         this.movies=moviesAvailable;
+        this.users=userList;
     }
 
     public void run() {
+        login();
         displayWelcomeMessage();
         printMenuOptions();
 
@@ -29,7 +33,12 @@ public class Main {
                 printBooks();
                 output.println("Select the isbn of the book to be reserved");
                 int bookToReserve = input.nextInt();
-                reserveBook(bookToReserve);
+                if(userId!=null){
+                    reserveBook(bookToReserve);
+                    }
+                else {
+                    output.println("Sorry! you need to login to use this service!");
+                }
             } else if (userChoice == 2)
                 displayLibrarianMessage();
             else if(userChoice == 3)
@@ -48,12 +57,19 @@ public class Main {
         List<Movie>availableMovies = new ArrayList<Movie>();
         availableBooks.add(new Book(1, "Deathly Hallows"));
         availableBooks.add(new Book(2, "Chamber of Secret"));
+        availableBooks.add(new Book(3, "the Kite Runner"));
 
         availableMovies.add(new Movie("Inception","Christopher Nolan","9.5"));
         availableMovies.add(new Movie("Expendables","S Stallon","7.0"));
         availableMovies.add(new Movie("Lincoln","Steven","N/A"));
 
-        new Main(System.out, new Input(), availableBooks, availableMovies).run();
+        List<User>userList=new ArrayList<User>();
+        userList.add(new User("1111111","password1"));
+        userList.add(new User("1111112","password2"));
+        userList.add(new User("1111113","password3"));
+
+
+        new Main(System.out, new Input(), availableBooks, availableMovies, userList).run();
     }
 
     public void printMenuOptions() {
@@ -92,7 +108,12 @@ public class Main {
     }
 
     public void displayLibrarianMessage() {
-        output.println("Contact librarian");
+        if(userId!=null){
+            output.println("Your UserID is-->" + userId);
+        }
+        else {
+            output.println("Contact librarian");
+        }
     }
 
     public void printMovies() {
@@ -101,5 +122,53 @@ public class Main {
         for(Movie movie:movies){
             output.println(movie.display());
         }
+    }
+
+    public void printLoginOptions() {
+        output.println("Select your login options");
+        output.println("1: user 2: guest");
+    }
+
+    public boolean validateUser(String userId, String password) {
+        User loggedInUser=new User(userId,password);
+        for (User user:users){
+            if(loggedInUser.equals(user))
+                return true;
+        }
+        return false;
+    }
+
+    public void login() {
+        boolean shouldExit=true;
+        while (shouldExit){
+            printLoginOptions();
+            int loginType=input.nextInt();
+            if(loginType==1){
+                output.println("Enter UserID:");
+                String userId=input.next();
+                output.println("Enter password:");
+                String password=input.next();
+                User loggedUser=new User(userId,password);
+                if(validateUser(userId,password)){
+                    output.println("You are logged with userID-->"+userId);
+                    this.userId=loggedUser;
+                    break;
+                }
+                else {
+                    output.println("Incorrect UserName or password. Please try again.!");
+
+                }
+
+            }
+            else if(loginType==2){
+                output.println("You are entering Library as guest");
+                break;
+            }
+            else if(loginType==0) {
+                output.println("enter valid option. !!");
+                shouldExit=false;
+            }
+        }
+
     }
 }
