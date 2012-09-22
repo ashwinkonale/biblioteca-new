@@ -29,13 +29,15 @@ public class Main {
         performMenuSelection();
     }
 
-    private void performMenuSelection() {
+    void performMenuSelection() {
         int userChoice = input.nextInt();
         while (userChoice != 0) {
             if (userChoice == 1) {
                 printBooks();
                 if (currentUser != null) {
                     reserveBook();
+                } else {
+                    output.println("Cannot reserve book without logging in.");
                 }
             } else if (userChoice == 2)
                 displayLibrarianMessage();
@@ -126,6 +128,7 @@ public class Main {
         output.println("Select your login options");
         output.println("1: User");
         output.println("2: Guest");
+        output.println("0: Exit");
     }
 
     public boolean validateUser(String userId, String password) {
@@ -138,8 +141,8 @@ public class Main {
     }
 
     public void login() {
-        boolean flag = true;
-        while (flag) {
+        boolean continueLoop = true;
+        while (continueLoop) {
             try {
                 printLoginOptions();
                 int loginType = input.nextInt();
@@ -149,13 +152,13 @@ public class Main {
                     guestLogin();
                     break;
                 } else if (loginType == 0) {
-                    flag = false;
+                    continueLoop = false;
                 } else {
                     output.println("Select Valid Option");
                 }
             } catch (Exception E) {
                 output.println("enter valid option. !!");
-                flag = false;
+                continueLoop = false;
             }
         }
 

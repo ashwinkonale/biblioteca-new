@@ -164,13 +164,13 @@ public class MainTest {
         verify(mockOutput).println("You are entering Library as guest");
     }
 
-    @Test(timeout = 100)
+    @Test()
     public void shouldDisplayErrorMessageIfValidationIsUnsuccessful() {
-        when(mockInput.nextInt()).thenReturn(1, 1, 0);
+        when(mockInput.nextInt()).thenReturn(1, 0);
         when(mockInput.next()).thenReturn("1111112", "password1");
         main.run();
-        verify(mockOutput, times(2)).println("Incorrect UserName or password. Please try again.!");
-        verify(mockOutput, times(3)).println("Select your login options");
+        verify(mockOutput).println("Incorrect UserName or password. Please try again.!");
+        verify(mockOutput, times(2)).println("Select your login options");
     }
 
     @Test(timeout = 100)
